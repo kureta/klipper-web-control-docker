@@ -1,4 +1,4 @@
-FROM python:3.10-bullseye as builder
+FROM python:3.9-bullseye as builder
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG KLIPPER_BRANCH="master"
@@ -11,7 +11,7 @@ ARG MOONRAKER_VENV_DIR=${HOME}/moonraker-env
 
 RUN useradd -d ${HOME} -ms /bin/bash ${USER}
 RUN apt-get update && \
-    apt-get install -y locales git sudo wget curl gzip tar python2 virtualenv python-dev libffi-dev build-essential libncurses-dev libusb-dev gpiod python3-virtualenv python3-dev libopenjp2-7 python3-libgpiod liblmdb-dev libsodium-dev
+    apt-get install -y locales git sudo wget curl gzip tar python2 virtualenv python-dev libffi-dev build-essential libncurses-dev libusb-dev python3-virtualenv python3-dev libopenjp2-7 python3-libgpiod liblmdb-dev libsodium-dev
 
 RUN sed -i -e 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen
 RUN locale-gen
@@ -38,11 +38,11 @@ RUN cd ${HOME}/klipper && make
 RUN git clone --single-branch --branch ${MOONRAKER_BRANCH} https://github.com/Arksine/moonraker.git moonraker
 RUN [ ! -d ${MOONRAKER_VENV_DIR} ] && python3 -m venv ${MOONRAKER_VENV_DIR}
 RUN ${MOONRAKER_VENV_DIR}/bin/python -m pip install pip -U
-RUN ${MOONRAKER_VENV_DIR}/bin/pip install wheel gpiod
+RUN ${MOONRAKER_VENV_DIR}/bin/pip install wheel
 
 RUN ${MOONRAKER_VENV_DIR}/bin/pip install -r moonraker/scripts/moonraker-requirements.txt
 
-FROM python:3.10-slim-bullseye as image
+FROM python:3.9-slim-bullseye as image
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -51,7 +51,6 @@ RUN apt-get update && \
     curl \
     gcc \
     git \
-    gpiod \
     iproute2 \
     libcurl4-openssl-dev \
     libjpeg-dev \
@@ -95,9 +94,9 @@ RUN useradd --user-group --no-log-init --shell /bin/false -m -d ${HOME} ${USER} 
     usermod -a -G dialout ${USER} && \
     mkdir -p /var/log/supervisor && \
     mkdir -p /var/log/klipper && chown ${USER}:${USER} /var/log/klipper ${HOME} && \
-    pip install --no-cache supervisord-dependent-startup gpiod && \
+    pip install --no-cache supervisord-dependent-startup && \
     mkdir -p /usr/lib/python3 && \
-    ln -s /usr/local/lib/python3.10/site-packages /usr/lib/python3/dist-packages
+    ln -s /usr/local/lib/python3.9/site-packages /usr/lib/python3/dist-packages
 
 USER ${USER}
 WORKDIR ${HOME}
