@@ -20,6 +20,7 @@ services:
       # - <<your_config_path>>:/home/klippy/.config
       # - ./printer.cfg:/home/klippy/.config/printer.cfg
       - /sys/class/gpio:/sys/class/gpio
+      - /sys/devices/platform/soc/fe200000.gpio/:/sys/devices/platform/soc/fe200000.gpio/
     networks:
       - web
     # mount serial device - take care to grant sufficient permissions to the device: <host_dev>:<container_dev>
