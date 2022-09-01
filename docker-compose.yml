@@ -27,6 +27,7 @@ services:
       - /dev/serial/by-id/usb-Klipper_stm32f103xe_39FFD2054246303718661857-if00:/dev/ttyACM0
       - /dev/video0:/dev/video0
       - /dev/gpiochip0:/dev/gpiochip0
+      - /sys/class/gpio:/sys/class/gpio
       - /dev/gpiomem:/dev/gpiomem
 
   ##################################################################
