@@ -19,6 +19,7 @@ services:
       - moonraker_data:/home/klippy/.moonraker
       # - <<your_config_path>>:/home/klippy/.config
       # - ./printer.cfg:/home/klippy/.config/printer.cfg
+      - /sys/class/gpio:/sys/class/gpio
     networks:
       - web
     # mount serial device - take care to grant sufficient permissions to the device: <host_dev>:<container_dev>
@@ -27,7 +28,6 @@ services:
       - /dev/serial/by-id/usb-Klipper_stm32f103xe_39FFD2054246303718661857-if00:/dev/ttyACM0
       - /dev/video0:/dev/video0
       - /dev/gpiochip0:/dev/gpiochip0
-      - /sys/class/gpio:/sys/class/gpio
       - /dev/gpiomem:/dev/gpiomem
 
   ##################################################################
