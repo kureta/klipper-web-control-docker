@@ -24,7 +24,7 @@ services:
     # mount serial device - take care to grant sufficient permissions to the device: <host_dev>:<container_dev>
     # put <container_dev> into your printer.cfg
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/serial/by-id/usb-Klipper_stm32f103xe_39FFD2054246303718661857-if00:/dev/ttyACM0
       - /dev/video0:/dev/video0
       - /dev/gpiochip0:/dev/gpiochip0
       - /dev/gpiomem:/dev/gpiomem
