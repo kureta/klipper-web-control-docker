@@ -21,6 +21,8 @@ services:
       - moonraker_data:/home/klippy/.moonraker
       # - <<your_config_path>>:/home/klippy/.config
       # - ./printer.cfg:/home/klippy/.config/printer.cfg
+    networks:
+      - web
     # mount serial device - take care to grant sufficient permissions to the device: <host_dev>:<container_dev>
     # put <container_dev> into your printer.cfg
     devices:
@@ -74,6 +76,13 @@ services:
     links:
       - klipper:klipper
       # - klipper_another_printer:klipper_another_printer
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.fluidd.rule=Host(`fluidd.kureta.xyz`)
+      - traefik.http.routers.fluidd.entrypoints=websecure
+      - traefik.http.routers.fluidd.tls.certresolver=myresolver
 
   mainsail:
     image: dimalo/mainsail
@@ -91,8 +100,18 @@ services:
     links:
       - klipper:klipper
       # - klipper_another_printer:klipper_another_printer
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mainsail.rule=Host(`mainsail.kureta.xyz`)
+      - traefik.http.routers.mainsail.entrypoints=websecure
+      - traefik.http.routers.mainsail.tls.certresolver=myresolver
 
 volumes: 
   gcode_files:
   moonraker_data:
 
+networks:
+  web:
+    external: true
