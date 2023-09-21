@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   klipper:
-    image: dimalo/klipper-moonraker
+    image: docker.kureta.xyz/klipper
     build:
       dockerfile: ./klipper/Dockerfile
       context: .
@@ -35,10 +35,10 @@ services:
       - /dev/serial/by-id/usb-Klipper_stm32f103xe_39FFD2054246303718661857-if00:/dev/serial/by-id/usb-Klipper_stm32f103xe_39FFD2054246303718661857-if00
       - /dev/video0:/dev/video0
       - /dev/gpiochip0:/dev/gpiochip0
-      - /dev/gpiomem:/dev/gpiomem
+      # - /dev/gpiomem:/dev/gpiomem
 
   mainsail:
-    image: dimalo/mainsail
+    image: docker.kureta.xyz/mainsail
     build:
       dockerfile: Dockerfile
       context: frontend
@@ -47,6 +47,13 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.mainsail.rule=Host(`mainsail.kureta.xyz`)
+        - traefik.http.routers.mainsail.entrypoints=websecure
+        - traefik.http.routers.mainsail.tls.certresolver=myresolver
+        - traefik.http.services.registry_browser.loadbalancer.server.port=80
+        - traefik.http.routers.mainsail.service=mainsail
     depends_on:
       - klipper
       # - klipper_another_printer
@@ -56,11 +63,6 @@ services:
     networks:
       - public
       - klipper_internal
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.mainsail.rule=Host(`mainsail.kureta.xyz`)
-      - traefik.http.routers.mainsail.entrypoints=websecure
-      - traefik.http.routers.mainsail.tls.certresolver=myresolver
 
 volumes:
   gcode_files:
