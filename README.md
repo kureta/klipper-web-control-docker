@@ -22,6 +22,7 @@ __Klipper with Moonraker shipped with Fluidd and/or Mainsail__
 - Docker multistage builds for optimized image sizes
 - fully integrated klipper image with moonraker enabled
   - startup management with supervisord & dependent startup (klipper starts first, then only if klipper is running moonraker is started)
+- Optionally use the klipper_z_calibration-extension
 - collection of useful klipper macros [see client_macros.cfg](./config/client_macros.cfg)
   - Nozzle prime line with random Y starting point
     
@@ -55,7 +56,7 @@ __Klipper with Moonraker shipped with Fluidd and/or Mainsail__
   - supports [Fluidd](https://github.com/cadriel/fluidd)
   - supports [Mainsail](https://github.com/meteyou/mainsail)
   - you can even run both in parallel!
-- only your printer.cfg is required!
+- only your printer.cfg is required
   - the services start without it, so you can supply your config through the web UI
   - you can mount your config file to /home/klippy/.config/printer.cfg, and klipper will pick it up after a restart
 
@@ -63,6 +64,7 @@ __Klipper with Moonraker shipped with Fluidd and/or Mainsail__
 
 ___Prerequisites:___
 - _Your klipper host machine runs Linux or MacOS (Windows was not tested yet)_
+    - (MacOS) Currently it is not possible to expose serial devices to a container in MacOS Docker. This is a known issue with Docker (https://github.com/docker/for-mac/issues/900)
 - _You have docker and docker-compose installed on your machine_
 - _You have flashed your printer with the appropriate .bin_
 - _You have your printer connected to your machine and you know it's serial mount point (e.g. /dev/ttyACM0 or /dev/ttyUSB0)_
@@ -132,4 +134,5 @@ check your libseccomp version and update if needed (see [https://docs.linuxserve
 - [Moonraker](https://github.com/Arksine/moonraker)
 - [Fluidd](https://github.com/cadriel/fluidd)
 - [Mainsail](https://github.com/meteyou/mainsail)
+- [klipper_z_calibration](https://github.com/protoloft/klipper_z_calibration)
 - awesome global RepRap open source community!
