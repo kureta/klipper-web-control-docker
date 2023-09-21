@@ -11,7 +11,7 @@ services:
     #   - "996"
     #   - "998"
     cap_add:
-      - SYS_NICE
+      - ALL
     deploy:
       mode: replicated
       replicas: 1
@@ -27,15 +27,14 @@ services:
       # - ./printer.cfg:/home/klippy/.config/printer.cfg
       - /sys/class/gpio:/sys/class/gpio
       - /sys/devices/platform/soc/fe200000.gpio/:/sys/devices/platform/soc/fe200000.gpio/
-    networks:
-      - klipper_internal
-    # mount serial device - take care to grant sufficient permissions to the device: <host_dev>:<container_dev>
-    # put <container_dev> into your printer.cfg
-    devices:
-      - /dev/serial/by-id/usb-Klipper_stm32f103xe_39FFD2054246303718661857-if00:/dev/serial/by-id/usb-Klipper_stm32f103xe_39FFD2054246303718661857-if00
+      # mount serial device - take care to grant sufficient permissions to the device: <host_dev>:<container_dev>
+      # put <container_dev> into your printer.cfg
+      - /dev/ttyACM0:/dev/ttyACM0
       - /dev/video0:/dev/video0
       - /dev/gpiochip0:/dev/gpiochip0
       # - /dev/gpiomem:/dev/gpiomem
+    networks:
+      - klipper_internal
 
   mainsail:
     image: docker.kureta.xyz/mainsail
@@ -52,7 +51,7 @@ services:
         - traefik.http.routers.mainsail.rule=Host(`mainsail.kureta.xyz`)
         - traefik.http.routers.mainsail.entrypoints=websecure
         - traefik.http.routers.mainsail.tls.certresolver=myresolver
-        - traefik.http.services.registry_browser.loadbalancer.server.port=80
+        - traefik.http.services.mainsail.loadbalancer.server.port=80
         - traefik.http.routers.mainsail.service=mainsail
     depends_on:
       - klipper

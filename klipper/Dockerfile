@@ -109,7 +109,7 @@ ENV WHEELS=/wheels
 ENV PYTHONUNBUFFERED=1
 
 ARG DEVICE_GROUP=device
-ARG DEVICE_GID=987
+ARG DEVICE_GID=986
 
 
 RUN useradd --user-group --no-log-init --shell /bin/false -m -d ${HOME} ${USER} && \
